@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API CEP</title>
+</head>
+
+<style>
+    body{
+        text-align: center;
+    }
+    #resultado {
+        margin-top: 20px;
+        font-weight: bold;
+    }
+</style>
+
+<body>
+    <h1>Consulta de Endereço por CEP</h1>
+
+    <label for="cep">Digite o CEP: </label>
+
+    <input type = "text" id="cep" maxlength="9" placeholder="Ex: 12345-678">
+
+    <button onclick="buscarEndereco()">BUSCAR</button>
+
+    <div id="resultado"></div>
+
+    <script>
+        function buscarEndereco() {
+            const cepInput = document.getElementById('cep');
+            const cep = cepInput.value.replace(/\D/g, '');
+            const url = `https://viacep.com.br/ws/${cep}/json/`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => mostrarResultado(data))
+                .catch(error => console.log(error));
+        }
+
+        function mostrarResultado(data){
+            const resultadoDiv = document.getElementById('resultado');
+            if (data.erro){
+                resultadoDiv.textContent = 'CEP não encontrado';
+            }else {
+                const endereco = `${data.logradouro}, ${data.bairro}, ${data.localidade} - ${data.uf}`;
+                resultadoDiv.textContent = endereco;
+            }
+        }
+        
+    </script>
+</body>
+</html>
